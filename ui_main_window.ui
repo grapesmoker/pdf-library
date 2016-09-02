@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>791</width>
+      <height>551</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMinAndMaxSize</enum>
+     </property>
+     <item>
+      <widget class="QListView" name="lstLeftPane">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QTableView" name="tblRightPane">
+       <property name="sizeAdjustPolicy">
+        <enum>QAbstractScrollArea::AdjustToContents</enum>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+       <property name="sortingEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuAuthors">
+    <property name="title">
+     <string>Authors</string>
+    </property>
+    <addaction name="actionAdd_author"/>
+    <addaction name="actionEdit_author"/>
+    <addaction name="actionRemove_author"/>
+   </widget>
+   <widget class="QMenu" name="menuPapers">
+    <property name="title">
+     <string>Papers</string>
+    </property>
+    <addaction name="actionAdd_paper"/>
+    <addaction name="actionEdit_paper"/>
+    <addaction name="actionRemove_paper"/>
+   </widget>
+   <widget class="QMenu" name="menuCategories">
+    <property name="title">
+     <string>Categories</string>
+    </property>
+    <addaction name="actionAdd_categoy"/>
+    <addaction name="actionEdit_category"/>
+    <addaction name="actionRemove_category"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuPapers"/>
+   <addaction name="menuAuthors"/>
+   <addaction name="menuCategories"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionNew">
+   <property name="text">
+    <string>&amp;New</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>&amp;Open</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+  </action>
+  <action name="actionAdd_paper">
+   <property name="text">
+    <string>Add paper</string>
+   </property>
+  </action>
+  <action name="actionRemove_paper">
+   <property name="text">
+    <string>Remove paper</string>
+   </property>
+  </action>
+  <action name="actionEdit_paper">
+   <property name="text">
+    <string>Edit paper</string>
+   </property>
+  </action>
+  <action name="actionAdd_author">
+   <property name="text">
+    <string>Add author</string>
+   </property>
+  </action>
+  <action name="actionEdit_author">
+   <property name="text">
+    <string>Edit author</string>
+   </property>
+  </action>
+  <action name="actionRemove_author">
+   <property name="text">
+    <string>Remove author</string>
+   </property>
+  </action>
+  <action name="actionAdd_categoy">
+   <property name="text">
+    <string>Add category</string>
+   </property>
+  </action>
+  <action name="actionEdit_category">
+   <property name="text">
+    <string>Edit category</string>
+   </property>
+  </action>
+  <action name="actionRemove_category">
+   <property name="text">
+    <string>Remove category</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
