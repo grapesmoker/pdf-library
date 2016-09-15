@@ -4,7 +4,6 @@ sys.setdefaultencoding('utf-8')
 
 import os
 import models
-import pdfrw
 
 from functools import partial
 

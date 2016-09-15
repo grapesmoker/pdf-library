@@ -1,0 +1,3 @@
+sqlalchemy
+PyPDF2
+Wand
