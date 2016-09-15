@@ -4,8 +4,8 @@ import shutil
 import hashlib
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog, QGraphicsScene
-from PyQt5.QtGui import QStandardItemModel, QStandardItem, QPixmap
+from PyQt5.QtWidgets import QDialog, QGraphicsScene, QDialogButtonBox, QMessageBox
+from PyQt5.QtGui import QStandardItemModel, QStandardItem, QPixmap, QKeySequence
 
 from ui_edit_document_dialog import Ui_EditDocumentDialog
 from edit_author import EditAuthorDialog
@@ -39,9 +39,14 @@ class EditDocumentDialog(QDialog):
         self.ui.btnRemoveAuthor.clicked.connect(self.remove_author)
         self.ui.btnCreateNewAuthor.clicked.connect(self.create_new_author)
         self.ui.spinPreview.valueChanged.connect(self.generate_preview)
+        self.ui.spinZoom.valueChanged.connect(self.zoom)
         self.preview = QGraphicsScene(self)
         self.ui.grPreview.setScene(self.preview)
         self.generate_preview()
+        self.scale = 1
+
+        hit_ok = QKeySequence(Qt.CTRL + Qt.Key_Return)
+        self.ui.buttonBox.button(QDialogButtonBox.Ok).setShortcut(hit_ok)
 
     def set_categories(self, categories):
 
@@ -54,6 +59,8 @@ class EditDocumentDialog(QDialog):
             self.categories_model.appendRow(item)
 
     def set_authors(self, authors):
+
+        self.author_model.clear()
 
         for author in authors:
             self.ui.cmbAuthor.addItem(str(author), author)
@@ -77,21 +84,33 @@ class EditDocumentDialog(QDialog):
     def generate_preview(self):
 
         if self.doc:
-            self.preview.clear()
-            page = self.ui.spinPreview.value()
-            doc_hash = hashlib.md5(self.doc.path).hexdigest()
-            tmp_pdf_file = os.path.abspath(os.path.join('./tmp', doc_hash + '-{}'.format(page) + '.pdf'))
-            tmp_img_file = os.path.abspath(os.path.join('./tmp', doc_hash + '-{}'.format(page) + '.png'))
-            if not os.path.exists(tmp_pdf_file):
-                shutil.copy(self.doc.path, tmp_pdf_file)
-            if not os.path.exists(tmp_img_file):
-                img = Image(filename=tmp_pdf_file + '[{}]'.format(page))
-                img.save(filename=tmp_img_file)
-            pixmap = QPixmap()
-            pixmap.load(tmp_img_file)
-            self.preview.addPixmap(pixmap)
-            self.generated_preview_files.add(tmp_pdf_file)
-            self.generated_preview_files.add(tmp_img_file)
+            try:
+                self.preview.clear()
+                page = self.ui.spinPreview.value()
+                doc_hash = hashlib.md5(self.doc.path).hexdigest()
+                tmp_pdf_file = os.path.abspath(os.path.join('./tmp', doc_hash + '-{}'.format(page) + '.pdf'))
+                tmp_img_file = os.path.abspath(os.path.join('./tmp', doc_hash + '-{}'.format(page) + '.png'))
+                if not os.path.exists(tmp_pdf_file):
+                    shutil.copy(self.doc.path, tmp_pdf_file)
+                if not os.path.exists(tmp_img_file):
+                    img = Image(filename=tmp_pdf_file + '[{}]'.format(page))
+                    img.save(filename=tmp_img_file)
+                pixmap = QPixmap()
+                pixmap.load(tmp_img_file)
+                self.preview.addPixmap(pixmap)
+                self.generated_preview_files.add(tmp_pdf_file)
+                self.generated_preview_files.add(tmp_img_file)
+            except Exception as ex:
+                QMessageBox.warning(self, 'Error!', 'Could not generate preview: {}'.format(ex.message))
+
+    def zoom(self):
+        zoom_factor = self.ui.spinZoom.value()
+        if zoom_factor > self.scale:
+            factor = 1.25
+        else:
+            factor = 0.8
+        self.scale = zoom_factor
+        self.ui.grPreview.scale(factor, factor)
 
     def save_to_db(self):
 

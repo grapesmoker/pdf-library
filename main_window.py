@@ -22,6 +22,7 @@ from edit_document import EditDocumentDialog
 from edit_author import EditAuthorDialog
 from rename_document import RenameDocumentDialog
 
+
 class MainWindow(QMainWindow):
 
     def __init__(self):
@@ -79,6 +80,7 @@ class MainWindow(QMainWindow):
 
                 self.build_lib_from_root()
 
+                self.left_model.clear()
                 self.left_model.appendRow(QStandardItem('Documents'))
                 self.left_model.appendRow(QStandardItem('Authors'))
                 self.left_model.appendRow(QStandardItem('Categories'))
@@ -93,9 +95,13 @@ class MainWindow(QMainWindow):
             self.session_maker.configure(bind=engine)
             self.session = self.session_maker()
 
+            self.left_model.clear()
             self.left_model.appendRow(QStandardItem('Documents'))
             self.left_model.appendRow(QStandardItem('Authors'))
             self.left_model.appendRow(QStandardItem('Categories'))
+            self.documents_model.clear()
+            self.author_model.clear()
+            self.categories_model.clear()
 
     def build_lib_from_root(self, interactive=True):
 
@@ -325,11 +331,11 @@ class MainWindow(QMainWindow):
                     doc = self.session.query(models.Document).filter(models.Document.id == doc_id).one()
                     path = doc.path
                     format_dict = {}
-                    if '{last_name}' in format_string:
+                    if '{last_name}' in format_string and len(doc.authors) > 0:
                         format_dict['last_name'] = doc.authors[0].last_name
-                    if '{first_name}' in format_string:
+                    if '{first_name}' in format_string and len(doc.authors) > 0:
                         format_dict['first_name'] = doc.authors[0].first_name
-                    if '{author}' in format_string:
+                    if '{author}' in format_string and len(doc.authors) > 0:
                         format_dict['author'] = str(doc.authors[0])
                     if '{authors_last_names}' in format_string:
                         format_dict['authors_last_names'] = ', '.join([auth.last_name for auth in doc.authors])
@@ -341,16 +347,22 @@ class MainWindow(QMainWindow):
                         format_dict['categories'] = ', '.join([str(cat).strip() for cat in doc.categories])
 
                     new_file_name = format_string.format(**format_dict)
-                    if new_file_name.startswith('the ') or new_file_name.startswith('The '):
-                        the = new_file_name[0:4]
-                        rest = new_file_name[4:]
-                        new_file_name = rest + ', ' + the
+                    articles = ['The ', 'the ', 'a ', 'A ', 'an ', 'An ']
+                    for article in articles:
+                        if new_file_name.startswith(article):
+                            rest = new_file_name[:len(article)]
+                            new_file_name = rest + ', ' + article
 
                     location = os.path.split(path)[0]
                     new_location = os.path.join(location, new_file_name)
                     if not new_location.endswith('.pdf') or new_location.endswith('.PDF'):
                         new_location += '.pdf'
-                    os.rename(path, new_location)
+                    if os.path.exists(new_location):
+                        result = QMessageBox.question(self, 'File exists', 'A file named {} already exists. Overwrite?'.format(new_location))
+                        if result:
+                            os.rename(path, new_location)
+                    else:
+                        os.rename(path, new_location)
                     doc.path = new_location
                     self.session.add(doc)
                     self.session.commit()
