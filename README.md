@@ -2,6 +2,10 @@
 
 pdf-library is a program for keeping track of your PDFs. It allows you to build a databse complete with metadata about the file. It's particularly useful for keeping track of things like scientific papers.
 
+# Running it
+
+Clone the repo, go to the directory you cloned to, and run `./main`.
+
 # Requirements
 
 You'll need to install Qt5 and the Python bindings to Qt5, as well as ImageMagick (used for previews). You need to have `sqlalchemy`, `Wand` (an interface to ImageMagick), and `PyPDF2` installed; you can get these by doing `pip install -r requirements.txt`. There may be others that I'm forgetting though.
