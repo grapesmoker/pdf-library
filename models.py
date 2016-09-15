@@ -39,7 +39,7 @@ class Author(Base):
 
     def __str__(self):
         # return '<Author id={}, first_name={}, last_name={}>'.format(self.id, self.first_name, self.last_name)
-        return '{}, {} {}'.format(self.first_name or '', self.last_name or '', self.middle_name or '')
+        return '{}, {} {}'.format(self.last_name or '', self.first_name or '', self.middle_name or '')
 
 class Category(Base):
 
@@ -49,3 +49,6 @@ class Category(Base):
     name = Column(String(250))
 
     documents = relationship('Document', secondary=document_categories, back_populates='categories')
+
+    def __str__(self):
+        return self.name

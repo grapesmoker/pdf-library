@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>661</width>
+    <width>1072</width>
     <height>608</height>
    </rect>
   </property>
@@ -35,7 +35,7 @@
      <x>29</x>
      <y>30</y>
      <width>601</width>
-     <height>471</height>
+     <height>491</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -57,27 +57,166 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QComboBox" name="cmbAuthor"/>
+     <layout class="QHBoxLayout" name="authorLayout">
+      <item>
+       <layout class="QVBoxLayout" name="authorComboLayout">
+        <item>
+         <widget class="QComboBox" name="cmbAuthor">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>250</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>250</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+          </property>
+          <property name="minimumContentsLength">
+           <number>200</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnAddAuthor">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>160</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Add author</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnCreateNewAuthor">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>160</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Create and add author</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnRemoveAuthor">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>160</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Remove author</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QListView" name="lstAuthors">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::MultiSelection</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
-    <item row="2" column="0">
+    <item row="3" column="0">
      <widget class="QLabel" name="label_3">
       <property name="text">
        <string>Filename</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="txtPath"/>
+    </item>
+    <item row="4" column="0">
      <widget class="QLabel" name="label_5">
       <property name="text">
        <string>Categories</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
-     <widget class="QListView" name="lstCategories"/>
+    <item row="4" column="1">
+     <layout class="QHBoxLayout" name="categoryLayout">
+      <item>
+       <widget class="QListView" name="lstCategories">
+        <property name="selectionMode">
+         <enum>QAbstractItemView::NoSelection</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="txtPath"/>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>30</y>
+     <width>421</width>
+     <height>491</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Preview</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGraphicsView" name="grPreview"/>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="spinPreview"/>
     </item>
    </layout>
   </widget>
