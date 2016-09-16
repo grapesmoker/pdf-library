@@ -17,6 +17,10 @@ document_publishers = Table('document_publishers', Base.metadata,
                             Column('document_id', ForeignKey('documents.id'), primary_key=True),
                             Column('publisher_id', ForeignKey('publishers.id'), primary_key=True))
 
+document_journals = Table('document_journals', Base.metadata,
+                          Column('document_id', ForeignKey('documents.id'), primary_key=True),
+                          Column('journal_id', ForeignKey('journals.id'), primary_key=True))
+
 
 class Document(Base):
 
@@ -63,6 +67,19 @@ class Category(Base):
 class Publisher(Base):
 
     __tablename__ = 'publishers'
+
+    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
+    name = Column(String(250))
+
+    documents = relationship('Document', secondary=document_publishers, back_populates='publisher')
+
+    def __str__(self):
+        return self.name
+
+
+class Journal(Base):
+
+    __tablename__ = 'journals'
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     name = Column(String(250))

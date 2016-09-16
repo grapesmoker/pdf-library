@@ -37,6 +37,11 @@ def upgrade():
         sa.Column('name', sa.String(250)),
     )
 
+    op.create_table(
+        'journals',
+        sa.Column('id', sa.Integer, primary_key=True),
+        sa.Column('name', sa.String(500)),
+    )
 
 def downgrade():
     op.drop_table('authors')

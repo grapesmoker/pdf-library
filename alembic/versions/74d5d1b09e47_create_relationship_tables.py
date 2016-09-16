@@ -35,8 +35,15 @@ def upgrade():
         sa.Column('document_id', sa.Integer, sa.ForeignKey('documents.id'), primary_key=True)
     )
 
+    op.create_table(
+        'document_journals',
+        sa.Column('journal_id', sa.Integer, sa.ForeignKey('journals.id'), primary_key=True),
+        sa.Column('document_id', sa.Integer, sa.ForeignKey('documents.id'), primary_key=True)
+    )
+
 
 def downgrade():
     op.drop_table('author_documents')
     op.drop_table('document_categories')
     op.drop_table('document_publishers')
+    op.drop_table('document_journals')
