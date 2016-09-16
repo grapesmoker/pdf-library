@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1119</width>
+    <height>898</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -77,7 +77,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1119</width>
      <height>20</height>
     </rect>
    </property>
@@ -101,11 +101,11 @@
    </widget>
    <widget class="QMenu" name="menuPapers">
     <property name="title">
-     <string>&amp;Papers</string>
+     <string>&amp;Documents</string>
     </property>
-    <addaction name="actionAdd_paper"/>
-    <addaction name="actionEdit_paper"/>
-    <addaction name="actionRemove_paper"/>
+    <addaction name="actionAdd_doc"/>
+    <addaction name="actionEdit_doc"/>
+    <addaction name="actionRemove_doc"/>
    </widget>
    <widget class="QMenu" name="menuCategories">
     <property name="title">
@@ -141,19 +141,19 @@
     <string>E&amp;xit</string>
    </property>
   </action>
-  <action name="actionAdd_paper">
+  <action name="actionAdd_doc">
    <property name="text">
-    <string>&amp;Add paper</string>
+    <string>&amp;Add document</string>
    </property>
   </action>
-  <action name="actionRemove_paper">
+  <action name="actionRemove_doc">
    <property name="text">
-    <string>&amp;Remove paper</string>
+    <string>&amp;Remove document</string>
    </property>
   </action>
-  <action name="actionEdit_paper">
+  <action name="actionEdit_doc">
    <property name="text">
-    <string>&amp;Edit paper</string>
+    <string>&amp;Edit document</string>
    </property>
   </action>
   <action name="actionAdd_author">

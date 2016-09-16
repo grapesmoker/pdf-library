@@ -53,10 +53,13 @@ class MainWindow(QMainWindow):
 
         self.ui.actionAdd_author.triggered.connect(self.add_author)
         self.ui.actionAdd_category.triggered.connect(self.add_category)
-        # self.ui.actionAdd_paper.triggered.connect(self.add)
-        self.ui.actionEdit_paper.triggered.connect(partial(self.edit_row, 'document'))
+        self.ui.actionAdd_doc.triggered.connect(self.add_document)
+        self.ui.actionEdit_doc.triggered.connect(partial(self.edit_row, 'document'))
         self.ui.actionEdit_category.triggered.connect(partial(self.edit_row, 'category'))
         self.ui.actionEdit_author.triggered.connect(partial(self.edit_row, 'author'))
+        self.ui.actionRemove_author.triggered.connect(self.delete_authors)
+        self.ui.actionRemove_category.triggered.connect(self.delete_categories)
+        self.ui.actionRemove_doc.triggered.connect(self.delete_documents)
 
     def create_new_library(self):
 
@@ -91,6 +94,8 @@ class MainWindow(QMainWindow):
             self.library_root = os.path.split(library_path)[0]
             engine = create_engine('sqlite:///{}'.format(library_path))
             engine.connect()
+
+            models.Base.metadata.create_all(engine)
             self.session_maker.configure(bind=engine)
             self.session = self.session_maker()
 
@@ -129,52 +134,56 @@ class MainWindow(QMainWindow):
                 for f in files:
                     if f.endswith('.pdf'):
                         full_path = os.path.join(root, f)
-                        try:
-                            pdf = PdfFileReader(open(full_path, 'rb'))
-                            meta = pdf.getDocumentInfo()
-                            if meta:
-                                author = unicode(meta.get('/Author', ''))
-                                title = unicode(meta.get('/Title'))
-                            else:
-                                author = ''
-                                title = None
-                        except PdfReadError:
-                            author = ''
-                            title = None
-                        except Exception:
-                            author = ''
-                            title = None
-                        # keywords = str(meta.get('/Keywords')).split(',')
-
-                        new_document = models.Document(name=title, path=full_path)
-                        if author != '':
-                            author_names = author.split()
-                            if len(author_names) == 0:
-                                author_names = ['', '']
-                            existing_author = self.session.query(models.Author).filter(
-                                    models.Author.first_name == author_names[0]
-                                    and models.Author.last_name == author_names[-1]
-                            ).first()
-                            if existing_author:
-                                new_author = existing_author
-                            else:
-                                new_author = models.Author(first_name=author_names[0], last_name=author_names[-1])
-                        else:
-                            new_author = None
-
-                        self.session.add(new_document)
-                        if new_author:
-
-                            self.session.add(new_author)
-                        self.session.commit()
-
-                        if new_author:
-                            new_document.authors.append(new_author)
-                            new_author.documents.append(new_document)
-
-                        self.session.commit()
+                        self.import_pdf_file(full_path)
                         current_file += 1
                         progress.setValue(current_file)
+
+    def import_pdf_file(self, full_path):
+
+        try:
+            pdf = PdfFileReader(open(full_path, 'rb'))
+            meta = pdf.getDocumentInfo()
+            if meta:
+                author = unicode(meta.get('/Author', ''))
+                title = unicode(meta.get('/Title')).strip()
+                if title is None or title == '':
+                    title = os.path.split(full_path)[-1]
+            else:
+                author = ''
+                title = os.path.split(full_path)[-1]
+        except Exception:
+            author = ''
+            title = os.path.split(full_path)[-1]
+
+        new_document = models.Document(name=title, path=full_path)
+        if author != '':
+            author_names = author.split()
+            if len(author_names) == 0:
+                author_names = ['', '']
+            existing_author = self.session.query(models.Author).filter(
+                    models.Author.first_name == author_names[0]
+                    and models.Author.last_name == author_names[-1]
+            ).first()
+            if existing_author:
+                new_author = existing_author
+            else:
+                new_author = models.Author(first_name=author_names[0], last_name=author_names[-1])
+        else:
+            new_author = None
+
+        self.session.add(new_document)
+        if new_author:
+
+            self.session.add(new_author)
+        self.session.commit()
+
+        if new_author:
+            new_document.authors.append(new_author)
+            new_author.documents.append(new_document)
+
+        self.session.commit()
+
+        return new_document
 
     def select_left_pane(self, selection):
 
@@ -266,6 +275,7 @@ class MainWindow(QMainWindow):
             rename_action.triggered.connect(self.rename_document)
             open_action = QAction('Open in viewer', self)
             open_action.triggered.connect(self.open_doc_in_viewer)
+            delete_action.triggered.connect(self.delete_documents)
             menu.addAction(open_action)
             menu.addAction(rename_action)
         elif row_type == 'author':
@@ -397,6 +407,31 @@ class MainWindow(QMainWindow):
             self.session.commit()
 
             self.populate_categories()
+
+    def add_document(self):
+
+        doc_files, ok = QFileDialog.getOpenFileNames(self, 'Select files to import')
+        if ok:
+            for doc_file in doc_files:
+                if doc_file.endswith('.pdf') or doc_file.endswith('.PDF'):
+                    self.import_pdf_file(doc_file)
+
+    # TODO: combine the three delete functions into one
+
+    def delete_documents(self):
+
+        result = QMessageBox.question(self, 'Delete documents',
+                                      'Are you sure you want to delete the selected documents from the library?')
+
+        if result == QMessageBox.Yes:
+            selection = self.ui.tblRightPane.selectionModel().selectedRows()
+            ids_to_delete = [self.documents_model.item(row.row(), 0).data() for row in selection]
+            documents_to_delete = self.session.query(models.Document).filter(models.Document.id.in_(ids_to_delete))
+            for doc in documents_to_delete:
+                self.session.delete(doc)
+            self.session.commit()
+            for row in selection:
+                self.documents_model.removeRow(row.row())
 
     def delete_authors(self):
 
