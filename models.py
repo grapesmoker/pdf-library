@@ -1,5 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, ForeignKey, Sequence, Table, Date
+from sqlalchemy import Column, Integer, String, ForeignKey, Sequence, Table, Date, Text
 from sqlalchemy.orm import relationship
 
 Base = declarative_base()
@@ -21,6 +21,10 @@ document_journals = Table('document_journals', Base.metadata,
                           Column('document_id', ForeignKey('documents.id'), primary_key=True),
                           Column('journal_id', ForeignKey('journals.id'), primary_key=True))
 
+document_shelves = Table('document_shelves', Base.metadata,
+                         Column('document_id', ForeignKey('documents.id'), primary_key=True),
+                         Column('shelf_id', ForeignKey('shelves.id'), primary_key=True))
+
 
 class Document(Base):
 
@@ -29,10 +33,13 @@ class Document(Base):
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     name = Column(String(500))
     path = Column(String(1000))
+    abstract = Column(Text())
 
     authors = relationship('Author', secondary=author_documents, back_populates='documents')
     categories = relationship('Category', secondary=document_categories, back_populates='documents')
     publisher = relationship('Publisher', secondary=document_publishers, back_populates='documents')
+    journal = relationship('Journal', secondary=document_journals, back_populates='documents')
+    shelves = relationship('Shelf', secondary=document_shelves, back_populates='documents')
 
 
 class Author(Base):
@@ -84,7 +91,21 @@ class Journal(Base):
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     name = Column(String(250))
 
-    documents = relationship('Document', secondary=document_publishers, back_populates='publisher')
+    documents = relationship('Document', secondary=document_journals, back_populates='journal')
+
+    def __str__(self):
+        return self.name
+
+
+class Shelf(Base):
+
+    __tablename__ = 'shelves'
+
+    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
+    name = Column(String(250))
+    description = Column(Text())
+
+    documents = relationship('Document', secondary=document_shelves, back_populates='shelves')
 
     def __str__(self):
         return self.name

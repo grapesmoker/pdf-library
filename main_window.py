@@ -86,6 +86,8 @@ class MainWindow(QMainWindow):
                 self.left_model.appendRow(QStandardItem('Documents'))
                 self.left_model.appendRow(QStandardItem('Authors'))
                 self.left_model.appendRow(QStandardItem('Categories'))
+                self.left_model.appendRow(QStandardItem('Publishers'))
+                self.left_model.appendRow(QStandardItem('Journals'))
 
     def open_library(self):
         library_path, file_filter = QFileDialog.getOpenFileName(self, 'Select library', './libraries')
@@ -103,6 +105,8 @@ class MainWindow(QMainWindow):
             self.left_model.appendRow(QStandardItem('Documents'))
             self.left_model.appendRow(QStandardItem('Authors'))
             self.left_model.appendRow(QStandardItem('Categories'))
+            self.left_model.appendRow(QStandardItem('Publishers'))
+            self.left_model.appendRow(QStandardItem('Journals'))
             self.documents_model.clear()
             self.author_model.clear()
             self.categories_model.clear()

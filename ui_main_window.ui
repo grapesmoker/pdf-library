@@ -89,6 +89,7 @@
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
     <addaction name="separator"/>
+    <addaction name="actionPreferences"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuAuthors">
@@ -115,10 +116,18 @@
     <addaction name="actionEdit_category"/>
     <addaction name="actionRemove_category"/>
    </widget>
+   <widget class="QMenu" name="menu_Filter">
+    <property name="title">
+     <string>&amp;Filter</string>
+    </property>
+    <addaction name="action_Apply_filter"/>
+    <addaction name="action_Clear_filter"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuPapers"/>
    <addaction name="menuAuthors"/>
    <addaction name="menuCategories"/>
+   <addaction name="menu_Filter"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNew">
@@ -184,6 +193,21 @@
   <action name="actionRemove_category">
    <property name="text">
     <string>&amp;Remove category</string>
+   </property>
+  </action>
+  <action name="action_Apply_filter">
+   <property name="text">
+    <string>&amp;Apply filter</string>
+   </property>
+  </action>
+  <action name="action_Clear_filter">
+   <property name="text">
+    <string>&amp;Clear filter</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>&amp;Preferences</string>
    </property>
   </action>
  </widget>
